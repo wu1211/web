@@ -15,15 +15,9 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized,
 import streamlit as st
 import io
 
-ups=st.file_uploader("choose a file",accept_multiple_files=True,type='mp4')
-if 'clicked' not in st.session_state:
-    st.session_state.clicked = False
-
-def click_button():
-    st.session_state.clicked = True
-
-st.button('apply',help="press to start setect", on_click=click_button)
-while (not st.session_state.clicked):
+ups=st.file_uploader("choose a file",accept_multiple_files=True,key=3,type='mp4')
+re=st.button('apply',help="press to apply",key='a')
+while (not re):
     continue
 c=0
 if not os.path.isdir('./sou'):
@@ -43,6 +37,7 @@ for k in ups:
         out.write(g.read())
     out.close()
     c+=1
+@st.cache_data
 def detect(save_img=False):
     weights, view_img, save_txt, imgsz, trace = opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     source = 'sou'
@@ -220,5 +215,5 @@ def ck():
         st.image(f"info/{a}.jpg")
         a=a+1
     st.write("finish!")
-st.button('check',help="check the result", on_click=ck)
+st.button('check',help="check the result",key='r', on_click=ck)
 
